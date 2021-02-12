@@ -1,32 +1,52 @@
-import React, {} from 'react';
+import React from 'react';
 import { MapboxScene, PointLayer } from '@antv/l7-react';
 
-const fetchData = async () => {
-    const data = await fetch(
-      'https://gw.alipayobjects.com/os/basement_prod/32e1f3ab-8588-46cb-8a47-75afb692117d.json',
-    )
-    .then(res => res.json())
-    .then(data => {
-        data.features = data.features.filter(item => {
-        return item.properties.capacity > 800;
-      })});
+// const fetchData = async () => {
+//     const data = await fetch(
+//       'https://gw.alipayobjects.com/os/basement_prod/32e1f3ab-8588-46cb-8a47-75afb692117d.json',
+//     )
+//     .then(res => res.json())
+//     .then(data => {
+//         data.features = data.features.filter(item => {
+//         return item.properties.capacity > 800;
+//       })});
     
-    return data;
-};
+//     return data;
+// };
 
 const mapCfg = {
-    center: [-4.28922,55.87189],
+    // center: [55.86812581416994, -4.2447524327457895],
+    // it needs to change order when get the value
+    // from Google
+    center: [-4.2447524327457895, 55.86812581416994],
     pitch: 0,
     style: 'dark',
-    zoom: 1,
+    zoom: 8.6,
     maxZoom: 15
 }
 
 const MapInfo = () => {
     const [data, setData] = React.useState();
+    // promise....
+    // React.useEffect(() => {
+    //     const data = fetchData();
+    //     setData(data);
+    // }, []);
+
     React.useEffect(() => {
-        const data = fetchData();
-        setData(data);
+        const fetchData = async () => {
+          const response = await fetch(
+            'https://gw.alipayobjects.com/os/basement_prod/337ddbb7-aa3f-4679-ab60-d64359241955.json',
+          );
+          const data = await response.json().then(data => {
+                        data.features = data.features.filter(item => {
+                            return item.properties.capacity > 800;
+                        });
+          setData(data);
+        })};
+    
+    
+        fetchData();
     }, []);
 
     return(
